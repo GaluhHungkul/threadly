@@ -9,9 +9,9 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const navLinks = [
-    { name: "MEN", href: "#men" },
-    { name: "WOMEN", href: "#women" },
-    { name: "ACCESSORIES", href: "#accessories" },
+    { name: "MEN", href: "/categories/men" },
+    { name: "WOMEN", href: "/categories/women" },
+    { name: "ACCESSORIES", href: "/categories/accessories" },
     { name: "EDITORIAL", href: "#editorial" },
   ];
 

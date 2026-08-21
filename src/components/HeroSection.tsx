@@ -7,7 +7,7 @@ export default function HeroSection() {
       <div className="relative w-full h-[650px] md:h-[750px] lg:h-[820px] rounded-lg overflow-hidden group">
         {/* Background Image using next/image */}
         <Image
-          src="/images/hero_model.png"
+          src="https://images.unsplash.com/photo-1763873993447-1d0be71a96d9"
           alt="The Architecture of Silence - Autumn / Winter Collection"
           fill
           priority
@@ -16,7 +16,7 @@ export default function HeroSection() {
         />
 
         {/* Gradient Overlay for subtle text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
 
         {/* Content Container (Bottom Left) */}
         <div className="absolute bottom-10 left-8 md:bottom-16 md:left-16 max-w-xl text-white z-10 space-y-4">
