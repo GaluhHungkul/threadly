@@ -14,7 +14,7 @@ export default function ProductGallery({
   thumbnails,
   productName,
 }: ProductGalleryProps) {
-  const allImages = [mainImage, ...thumbnails];
+  const allImages = [mainImage];
   const [selectedImage, setSelectedImage] = useState(mainImage);
   const [imageErrorMap, setImageErrorMap] = useState<Record<string, boolean>>({});
 

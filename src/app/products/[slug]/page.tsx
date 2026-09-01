@@ -5,9 +5,9 @@ import { defaultProduct } from "@/data/productData";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { productId } = await params;
+  const { slug } = await params;
   const productName = defaultProduct.name;
   return {
     title: `${productName} — THREADLY`,
@@ -18,9 +18,9 @@ export async function generateMetadata({
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { productId } = await params;
+  const { slug } = await params;
 
-  return <ProductDetailClient productId={productId} />;
+  return <ProductDetailClient slug={slug} />;
 }

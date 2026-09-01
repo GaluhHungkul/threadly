@@ -1,42 +1,42 @@
 import Image from "next/image";
 import Link from "next/link";
 
-interface Product {
-  id: string;
-  name: string;
-  price: string;
-  image: string;
-  alt: string;
-}
-
-const products: Product[] = [
+const products = [
   {
-    id: "1",
-    name: "CASHMERE ESSENTIAL",
-    price: "$450.00",
-    image: "/images/cashmere_sweater.png",
-    alt: "Dark charcoal cashmere sweater",
+    id: "01899f15-e1d7-44bc-85da-b3b64deb087b",
+    name: "Gold Geometric Earrings",
+    price: 190,
+    image:
+      "https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=800&auto=format&fit=crop",
+    alt: "Gold geometric architectural earrings",
+    slug: "gold-geometric-earrings",
   },
   {
-    id: "2",
-    name: "SILK TAILORED TROUSER",
-    price: "$580.00",
-    image: "/images/silk_trousers.png",
-    alt: "Cream silk tailored trousers",
+    id: "2799a5b0-58c8-4aef-ab3f-f27647e7ad54",
+    name: "Structured Mini Bag",
+    price: 650,
+    image:
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
+    alt: "Ivory structured leather mini bag",
+    slug: "structured-mini-bag",
   },
   {
-    id: "3",
-    name: "SCULPTURAL SILVER CUFF",
-    price: "$310.00",
-    image: "/images/silver_cuff.png",
-    alt: "Sculptural silver cuff bracelet",
+    id: "38b83ff0-bd8e-4b90-b58e-0064c2dc86ae",
+    name: "Sculptural Silver Cuff",
+    price: 310,
+    image:
+      "https://images.unsplash.com/photo-1724896728449-fae038f93e59?q=80&w=800&auto=format&fit=crop",
+    alt: "Sterling silver sculptural cuff bracelet",
+    slug: "sculptural-silver-cuff",
   },
   {
-    id: "4",
-    name: "NOMAD TRAVEL TOTE",
-    price: "$850.00",
-    image: "/images/travel_tote.jpg",
-    alt: "Brown leather travel tote bag",
+    id: "56e96b71-9f83-45b2-bfa1-835d75e96c21",
+    name: "Silk Twill Scarf",
+    price: 180,
+    image:
+      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=800&auto=format&fit=crop",
+    alt: "Ivory and charcoal silk twill scarf",
+    slug: "silk-twill-scarf",
   },
 ];
 
@@ -67,7 +67,7 @@ export default function NewArrivalsSection() {
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/products/${product.id}`}
+            href={`/products/${product.slug}`}
             className="group cursor-pointer flex flex-col bg-white rounded-lg p-3 transition-all duration-300 ambient-shadow-hover border border-transparent hover:border-[#eeeeee]"
           >
             {/* Product Image Container */}
@@ -87,7 +87,7 @@ export default function NewArrivalsSection() {
                 {product.name}
               </h3>
               <p className="text-xs font-normal text-[#717171]">
-                {product.price}
+                ${product.price}
               </p>
             </div>
           </Link>

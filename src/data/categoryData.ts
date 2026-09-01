@@ -1,7 +1,7 @@
 export interface CategoryProduct {
   id: string;
   name: string;
-  price: string;
+  price: number;
   image: string;
   alt: string;
   colorName: string;
@@ -10,6 +10,8 @@ export interface CategoryProduct {
   subcategory: string;
   sizes: string[];
   colors: string[];
+  category: string
+  slug?: string
 }
 
 export interface CategoryInfo {
@@ -22,6 +24,7 @@ export interface CategoryInfo {
   subcategories: { name: string; count: number }[];
   products: CategoryProduct[];
 }
+
 
 export const categoryData: Record<string, CategoryInfo> = {
   women: {
@@ -43,7 +46,7 @@ export const categoryData: Record<string, CategoryInfo> = {
       {
         id: "w-1",
         name: "Architectural Wool Coat",
-        price: "$1,250",
+        price: 1250,
         image:
           "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=800&auto=format&fit=crop",
         alt: "Charcoal architectural wool coat",
@@ -53,11 +56,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Outerwear",
         sizes: ["XS", "S", "M", "L"],
         colors: ["#1c1d1f", "#3f4239", "#e2e2e2"],
+        category: "women"
       },
       {
         id: "w-2",
         name: "Bias-Cut Silk Slip",
-        price: "$680",
+        price: 680,
         image:
           "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop",
         alt: "Ivory bias-cut silk slip dress",
@@ -66,11 +70,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Dresses",
         sizes: ["XS", "S", "M", "L", "XL"],
         colors: ["#e8e0d0", "#1c1d1f"],
+        category: "women"
       },
       {
         id: "w-3",
         name: "Oversized Poplin Shirt",
-        price: "$450",
+        price: 450,
         image:
           "https://images.unsplash.com/photo-1544441893-675973e31985?q=80&w=800&auto=format&fit=crop",
         alt: "Optic white oversized poplin shirt",
@@ -79,11 +84,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Tops & Silks",
         sizes: ["XS", "S", "M", "L"],
         colors: ["#f9f9f9", "#1c1d1f"],
+        category: "women"
       },
       {
         id: "w-4",
         name: "Fluid Crepe Midi",
-        price: "$790",
+        price: 790,
         image:
           "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop",
         alt: "Fluid charcoal crepe midi dress",
@@ -91,11 +97,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Dresses",
         sizes: ["XS", "S", "M", "L"],
         colors: ["#4a4a4a", "#2b2b2b"],
+        category: "women"
       },
       {
         id: "w-5",
         name: "Tailored Blazer",
-        price: "$920",
+        price: 920,
         image:
           "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop",
         alt: "Ivory tailored blazer",
@@ -104,11 +111,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Tailoring",
         sizes: ["XS", "S", "M", "L", "XL"],
         colors: ["#d4cec4", "#1c1d1f"],
+        category: "women"
       },
       {
         id: "w-6",
         name: "Silk Charmeuse Blouse",
-        price: "$560",
+        price: 560,
         image:
           "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=800&auto=format&fit=crop",
         alt: "Charcoal silk charmeuse blouse",
@@ -117,6 +125,7 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Tops & Silks",
         sizes: ["XS", "S", "M", "L"],
         colors: ["#3d3d3d", "#f5f0e8"],
+        category: "women"
       },
     ],
   },
@@ -139,7 +148,7 @@ export const categoryData: Record<string, CategoryInfo> = {
       {
         id: "m-1",
         name: "Double-Breasted Topcoat",
-        price: "$1,450",
+        price: 1450,
         image:
           "https://images.unsplash.com/photo-1619603364904-c0498317e145?q=80&w=800&auto=format&fit=crop",
         alt: "Charcoal double-breasted topcoat",
@@ -148,11 +157,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Outerwear",
         sizes: ["S", "M", "L", "XL"],
         colors: ["#1c1d1f", "#3f4239"],
+        category: "men"
       },
       {
         id: "m-2",
         name: "Merino Crewneck",
-        price: "$380",
+        price: 380,
         image:
           "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop",
         alt: "Off-white merino wool crewneck sweater",
@@ -161,11 +171,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Knitwear",
         sizes: ["S", "M", "L", "XL", "XXL"],
         colors: ["#e2ddd5", "#1c1d1f", "#4a4a4a"],
+        category: "men"
       },
       {
         id: "m-3",
         name: "Tapered Wool Trousers",
-        price: "$520",
+        price: 520,
         image:
           "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=800&auto=format&fit=crop",
         alt: "Charcoal tapered wool trousers",
@@ -173,11 +184,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Trousers",
         sizes: ["28", "30", "32", "34", "36"],
         colors: ["#1c1d1f", "#4a4a4a"],
+        category: "men"
       },
       {
         id: "m-4",
         name: "Linen Dress Shirt",
-        price: "$290",
+        price: 290,
         image:
           "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800&auto=format&fit=crop",
         alt: "Optic white linen dress shirt",
@@ -186,11 +198,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Shirts",
         sizes: ["S", "M", "L", "XL"],
         colors: ["#f9f9f9", "#1c1d1f"],
+        category: "men"
       },
       {
         id: "m-5",
         name: "Cashmere Rollneck",
-        price: "$640",
+        price: 640,
         image:
           "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800&auto=format&fit=crop",
         alt: "Charcoal cashmere rollneck sweater",
@@ -199,11 +212,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Knitwear",
         sizes: ["S", "M", "L", "XL"],
         colors: ["#1c1d1f", "#e2ddd5"],
+        category: "men"
       },
       {
         id: "m-6",
         name: "Structured Field Jacket",
-        price: "$880",
+        price: 880,
         image:
           "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?q=80&w=800&auto=format&fit=crop",
         alt: "Olive structured field jacket",
@@ -212,6 +226,7 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Outerwear",
         sizes: ["S", "M", "L", "XL"],
         colors: ["#3f4239", "#1c1d1f"],
+        category: "men"
       },
     ],
   },
@@ -234,7 +249,7 @@ export const categoryData: Record<string, CategoryInfo> = {
       {
         id: "a-1",
         name: "Pebbled Leather Tote",
-        price: "$890",
+        price: 890,
         image:
           "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
         alt: "Black pebbled leather structured tote",
@@ -243,11 +258,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Bags",
         sizes: ["OS"],
         colors: ["#1c1d1f", "#3a3028"],
+        category: "accessories"
       },
       {
         id: "a-2",
         name: "Sculptural Silver Cuff",
-        price: "$310",
+        price: 310,
         image:
           "https://images.unsplash.com/photo-1724896728449-fae038f93e59?q=80&w=800&auto=format&fit=crop",
         alt: "Sterling silver sculptural cuff bracelet",
@@ -256,11 +272,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Jewellery",
         sizes: ["OS"],
         colors: ["#c0c0c0"],
+        category: "accessories"
       },
       {
         id: "a-3",
         name: "Silk Twill Scarf",
-        price: "$180",
+        price: 180,
         image:
           "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=800&auto=format&fit=crop",
         alt: "Ivory and charcoal silk twill scarf",
@@ -268,11 +285,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Scarves",
         sizes: ["OS"],
         colors: ["#e8e0d0", "#1c1d1f"],
+        category: "accessories"
       },
       {
         id: "a-4",
         name: "Leather Belt",
-        price: "$220",
+        price: 220,
         image:
           "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop",
         alt: "Cognac leather belt with silver hardware",
@@ -281,11 +299,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Belts",
         sizes: ["S", "M", "L"],
         colors: ["#8B5E3C", "#1c1d1f"],
+        category: "accessories"
       },
       {
         id: "a-5",
         name: "Structured Mini Bag",
-        price: "$650",
+        price: 650,
         image:
           "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop",
         alt: "Ivory structured leather mini bag",
@@ -294,11 +313,12 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Bags",
         sizes: ["OS"],
         colors: ["#e8e0d0", "#1c1d1f", "#3a3028"],
+        category: "accessories"
       },
       {
         id: "a-6",
         name: "Gold Geometric Earrings",
-        price: "$190",
+        price: 190,
         image:
           "https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=800&auto=format&fit=crop",
         alt: "Gold geometric architectural earrings",
@@ -307,6 +327,7 @@ export const categoryData: Record<string, CategoryInfo> = {
         subcategory: "Jewellery",
         sizes: ["OS"],
         colors: ["#B8860B"],
+        category: "accessories"
       },
     ],
   },
@@ -317,3 +338,5 @@ export const defaultCategoryInfo: CategoryInfo = categoryData.women;
 export function getCategoryInfo(slug: string): CategoryInfo | null {
   return categoryData[slug.toLowerCase()] ?? null;
 }
+
+

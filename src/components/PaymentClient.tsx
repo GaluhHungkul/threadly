@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { CreditCard, Lock, ArrowRight, CheckCircle2, ShoppingBag, Search } from "lucide-react";
-import Navbar from "@/components/Navbar";
+ 
 
 interface OrderItem {
   id: string;
@@ -95,7 +95,7 @@ export default function PaymentClient() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f9f9] text-[#1a1c1c] selection:bg-[#000000] selection:text-[#ffffff]">
       {/* Shared Navbar */}
-      <Navbar />
+       
 
       {/* Main Payment Container */}
       <main className="flex-grow max-w-[1440px] mx-auto w-full px-6 md:px-16 py-6 md:py-12">

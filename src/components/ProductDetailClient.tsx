@@ -3,41 +3,95 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, Check, ShoppingBag } from "lucide-react";
-import Navbar from "@/components/Navbar";
+import { Star, ShoppingBag } from "lucide-react";
 import Footer from "@/components/Footer";
 import ProductGallery from "@/components/ProductGallery";
 import ProductAccordion from "@/components/ProductAccordion";
 import SizeGuideModal from "@/components/SizeGuideModal";
 import ReviewModal from "@/components/ReviewModal";
 import { defaultProduct, ProductReview, CompleteLookItem } from "@/data/productData";
+import { useProductDetail } from "@/services/product.service";
+import { useCart } from "@/lib/zustand/cart";
+import { toast } from "sonner";
+import Loading from "@/app/loading";
+import { notFound } from "next/navigation";
+
+const completeTheLookProducts = [
+  {
+    id: "2960eff5-28c7-4a67-a607-4f20c51ef459",
+    name: "Double-Breasted Topcoat",
+    price: 1450,
+    image:
+      "https://images.unsplash.com/photo-1619603364904-c0498317e145?q=80&w=800&auto=format&fit=crop",
+    alt: "Charcoal double-breasted topcoat",
+    slug: "double-breasted-topcoat",
+  },
+  {
+    id: "7b559501-3fd8-4383-9b82-5061d8f18144",
+    name: "Merino Crewneck",
+    price: 380,
+    image:
+      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=800&auto=format&fit=crop",
+    alt: "Off-white merino wool crewneck sweater",
+    slug: "merino-crewneck",
+  },
+  {
+    id: "d3c8f58e-e7d9-4f72-8734-b2928f6e9b12",
+    name: "Tapered Wool Trousers",
+    price: 520,
+    image:
+      "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?q=80&w=800&auto=format&fit=crop",
+    alt: "Charcoal tapered wool trousers",
+    slug: "tapered-wool-trousers",
+  },
+  {
+    id: "c6161911-e63c-4a09-b6f7-cc7e5c3791e5",
+    name: "Linen Dress Shirt",
+    price: 290,
+    image:
+      "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?q=80&w=800&auto=format&fit=crop",
+    alt: "Optic white linen dress shirt",
+    slug: "linen-dress-shirt",
+  },
+];
 
 interface ProductDetailClientProps {
-  productId?: string;
+  slug: string;
 }
 
-export default function ProductDetailClient({ productId }: ProductDetailClientProps) {
+export default function ProductDetailClient({ slug }: ProductDetailClientProps) {
+
+  const { data: productDetail, isPending:isPendingProductDetail, isError: isErrorProductDetail } = useProductDetail(slug)
+
   const product = defaultProduct;
 
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState("S");
+  
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [addedToCart, setAddedToCart] = useState(false);
   const [buyNowOpen, setBuyNowOpen] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [reviewsList, setReviewsList] = useState<ProductReview[]>(product.reviews);
   const [lookImageErrors, setLookImageErrors] = useState<Record<string, boolean>>({});
+  const { addItem } = useCart()
 
   const handleQuantityChange = (delta: number) => {
     setQuantity((prev) => Math.max(1, prev + delta));
   };
 
   const handleAddToCart = () => {
-    setAddedToCart(true);
-    setTimeout(() => {
-      setAddedToCart(false);
-    }, 2500);
+    if(!productDetail) return
+    if(!selectedColor || !selectedSize) return toast.warning("Please complete your selections")
+    toast.success("Item added to cart")
+    addItem({
+      id: productDetail.id!, 
+      image: productDetail.image!,
+      price: productDetail?.price,
+      name: productDetail?.name,
+      color: selectedColor ?? productDetail.colors[0],
+      size: selectedSize ?? productDetail.sizes[0]
+    })
   };
 
   const handleAddReview = (newReview: ProductReview) => {
@@ -48,21 +102,21 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
     setLookImageErrors((prev) => ({ ...prev, [id]: true }));
   };
 
+  if(isPendingProductDetail) return <Loading />
+  if(!productDetail) return notFound()
+  if(isErrorProductDetail) throw new Error("Failed to load product data")
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f9f9] text-[#1a1c1c] selection:bg-[#000000] selection:text-[#ffffff]">
-      {/* Top Header / Navigation */}
-      <Navbar />
-
       {/* Toast Notification when item added to cart */}
-      {addedToCart && (
+      {/* {addedToCart && (
         <div className="fixed bottom-6 right-6 z-50 bg-[#1a1c1c] text-white px-5 py-3.5 text-xs font-medium tracking-wider flex items-center gap-3 shadow-xl animate-fadeIn">
           <div className="w-5 h-5 bg-white text-[#1a1c1c] rounded-full flex items-center justify-center">
             <Check size={12} strokeWidth={2.5} />
           </div>
           <span>ADDED {quantity} × {product.name.toUpperCase()} TO BAG</span>
         </div>
-      )}
-
+      )} */}
       {/* Main Container */}
       <main className="flex-grow max-w-[1440px] mx-auto w-full px-6 md:px-16 py-6 md:py-10">
         {/* Breadcrumb Trail */}
@@ -89,9 +143,9 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
           {/* Left Column: Product Gallery (7 Cols) */}
           <div className="lg:col-span-7">
             <ProductGallery
-              mainImage={product.images.main}
-              thumbnails={product.images.thumbnails}
-              productName={product.name}
+              mainImage={productDetail.image}
+              thumbnails={[productDetail.image]}
+              productName={productDetail.name}
             />
           </div>
 
@@ -99,10 +153,10 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
           <div className="lg:col-span-5 flex flex-col pt-1">
             {/* Title & Price */}
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-[40px] font-normal text-[#1a1c1c] leading-[1.2] tracking-tight mb-2">
-              {product.name}
+              {productDetail.name}
             </h1>
             <p className="text-base sm:text-lg font-normal text-[#1a1c1c] mb-6">
-              {product.price}
+              ${productDetail.price}
             </p>
 
             {/* Description */}
@@ -115,22 +169,22 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
             {/* Color Selection */}
             <div className="mb-8">
               <label className="block text-xs font-medium tracking-[0.15em] text-[#1a1c1c] uppercase mb-3">
-                COLOR: {selectedColor.name}
+                COLOR: {selectedColor}
               </label>
               <div className="flex items-center space-x-3">
-                {product.colors.map((color) => {
-                  const isSelected = selectedColor.id === color.id;
+                {productDetail.colors.map((color, i) => {
+                  const isSelected = selectedColor === color;
                   return (
                     <button
-                      key={color.id}
+                      key={color + i}
                       onClick={() => setSelectedColor(color)}
-                      aria-label={`Select color ${color.name}`}
+                      aria-label={`Select color ${color}`}
                       className={`w-7 h-7 rounded-full transition-all duration-200 ${
                         isSelected
                           ? "ring-1 ring-offset-2 ring-[#1a1c1c]"
                           : "hover:scale-105"
                       }`}
-                      style={{ backgroundColor: color.hex }}
+                      style={{ backgroundColor: color }}
                     />
                   );
                 })}
@@ -152,7 +206,7 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
               </div>
 
               <div className="grid grid-cols-4 gap-3">
-                {product.sizes.map((size) => {
+                {productDetail.sizes.map((size) => {
                   const isSelected = selectedSize === size;
                   return (
                     <button
@@ -205,12 +259,12 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
               </div>
 
               {/* Buy Now Link */}
-              <Link
+              {/* <Link
                 href="/payment"
                 className="block text-center w-full border border-[#e5e5e5] bg-white text-[#1a1c1c] py-3.5 px-6 text-xs font-medium tracking-[0.2em] uppercase hover:bg-[#f3f3f3] transition-colors"
               >
                 BUY NOW
-              </Link>
+              </Link> */}
             </div>
 
             {/* Expandable Accordions */}
@@ -299,12 +353,13 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {product.completeTheLook.map((item: CompleteLookItem) => {
+            {completeTheLookProducts.map((item: CompleteLookItem) => {
               const hasError = lookImageErrors[item.id];
               return (
                 <Link
-                  href={`/products/${item.id}`}
+                  href={`/products/${item.slug}`}
                   key={item.id}
+                  scroll
                   className="group cursor-pointer flex flex-col bg-white rounded-none p-3 transition-all duration-300 ambient-shadow-hover border border-transparent hover:border-[#eeeeee]"
                 >
                   {/* Product Image Container */}
@@ -359,7 +414,7 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
                       {item.name}
                     </h3>
                     <p className="text-xs font-normal text-[#717171]">
-                      {item.price}
+                      ${item.price}
                     </p>
                   </div>
                 </Link>
@@ -401,8 +456,8 @@ export default function ProductDetailClient({ productId }: ProductDetailClientPr
 
             <div className="border-t border-b border-[#e5e5e5] py-4 my-4 space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-[#717171]">{product.name} ({selectedColor.name}, SIZE {selectedSize})</span>
-                <span className="font-medium">{product.price}</span>
+                <span className="text-[#717171]">{productDetail.name} ({selectedColor}, SIZE {selectedSize})</span>
+                <span className="font-medium">${product.price}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#717171]">Quantity</span>

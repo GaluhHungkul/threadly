@@ -4,12 +4,13 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, ChevronDown, SlidersHorizontal, X } from "lucide-react";
-import Navbar from "@/components/Navbar";
+ 
 import Footer from "@/components/Footer";
 import { CategoryInfo, CategoryProduct } from "@/data/categoryData";
+import { useProductsByCategory } from "@/services/product.service";
 
 interface CategoryClientProps {
-  category: CategoryInfo;
+  category: CategoryInfo
 }
 
 const SORT_OPTIONS = [
@@ -26,11 +27,10 @@ const PRICE_RANGES = [
   { label: "Over $1,000", min: 1000, max: Infinity },
 ];
 
-function parsePrice(price: string): number {
-  return parseInt(price.replace(/[^0-9]/g, ""), 10);
-}
-
 export default function CategoryClient({ category }: CategoryClientProps) {
+
+  const { data: productsData, isError:isProductsDataError } = useProductsByCategory(category.slug)
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
   const [selectedPriceRange, setSelectedPriceRange] = useState<number | null>(null);
@@ -97,7 +97,7 @@ export default function CategoryClient({ category }: CategoryClientProps) {
 
 
   const filteredProducts = useMemo(() => {
-    let result: CategoryProduct[] = [...category.products];
+    let result: CategoryProduct[] = productsData ?? [];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -118,7 +118,7 @@ export default function CategoryClient({ category }: CategoryClientProps) {
     if (selectedPriceRange !== null) {
       const range = PRICE_RANGES[selectedPriceRange];
       result = result.filter((p) => {
-        const price = parsePrice(p.price);
+        const price = p.price;
         return price >= range.min && price < range.max;
       });
     }
@@ -135,12 +135,12 @@ export default function CategoryClient({ category }: CategoryClientProps) {
       );
     }
 
-    if (sortBy === "price-asc") result.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
-    else if (sortBy === "price-desc") result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+    if (sortBy === "price-asc") result.sort((a, b) => a.price - b.price);
+    else if (sortBy === "price-desc") result.sort((a, b) => b.price - a.price);
     else if (sortBy === "newest") result = result.filter((p) => p.isNew).concat(result.filter((p) => !p.isNew));
 
     return result;
-  }, [category.products, searchQuery, selectedSubcategories, selectedPriceRange, selectedColors, sortBy, selectedSize]);
+  }, [searchQuery, selectedSubcategories, selectedPriceRange, selectedColors, sortBy, selectedSize, productsData]);
 
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice(
@@ -150,9 +150,11 @@ export default function CategoryClient({ category }: CategoryClientProps) {
 
   const currentSortLabel = SORT_OPTIONS.find((o) => o.value === sortBy)?.label ?? "Featured";
 
+  if(isProductsDataError) return <p>Error</p>
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f9f9] text-[#1a1c1c] selection:bg-[#000000] selection:text-[#ffffff]">
-      <Navbar />
+       
 
       <main className="flex-grow">
         {/* ── Hero Banner ── */}
@@ -435,7 +437,7 @@ function ProductCard({
 
   return (
     <Link
-      href={`/products/${product.id}`}
+      href={`/products/${product.slug}`}
       className="group cursor-pointer flex flex-col bg-white rounded-lg p-3 transition-all duration-300 ambient-shadow-hover border border-transparent hover:border-[#eeeeee]"
     >
       {/* Image */}
@@ -484,7 +486,7 @@ function ProductCard({
             {product.name}
           </h2>
           <span className="text-xs font-normal text-[#1a1c1c] flex-shrink-0">
-            {product.price}
+            ${product.price}
           </span>
         </div>
         <p className="text-[11px] font-normal text-[#717171]">

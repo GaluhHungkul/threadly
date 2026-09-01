@@ -3,16 +3,19 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Search, ShoppingBag, Menu, X } from "lucide-react";
+import { useCart } from "@/lib/zustand/cart";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
+  const { items } = useCart()
+
   const navLinks = [
     { name: "MEN", href: "/categories/men" },
     { name: "WOMEN", href: "/categories/women" },
     { name: "ACCESSORIES", href: "/categories/accessories" },
-    { name: "EDITORIAL", href: "#editorial" },
+    // { name: "EDITORIAL", href: "#editorial" },
   ];
 
   return (
@@ -52,7 +55,7 @@ export default function Navbar() {
         {/* Right: Search & Cart */}
         <div className="flex items-center space-x-5 sm:space-x-6">
           {/* Search Trigger */}
-          <div className="relative flex items-center">
+          {/* <div className="relative flex items-center">
             {searchOpen ? (
               <div className="flex items-center border-b border-[#1a1c1c] pb-1 animate-fadeIn">
                 <input
@@ -77,7 +80,7 @@ export default function Navbar() {
                 <Search size={18} strokeWidth={1.5} />
               </button>
             )}
-          </div>
+          </div> */}
 
           {/* Cart Icon with badge */}
           <Link
@@ -86,9 +89,9 @@ export default function Navbar() {
             aria-label="Shopping bag"
           >
             <ShoppingBag size={18} strokeWidth={1.5} />
-            <span className="absolute -top-0.5 -right-1.5 bg-[#000000] text-[#ffffff] text-[9px] font-medium w-4 h-4 rounded-full flex items-center justify-center">
-              2
-            </span>
+            {!!items.length && <span className="absolute -top-0.5 -right-1.5 bg-[#000000] text-[#ffffff] text-[9px] font-medium w-4 h-4 rounded-full flex items-center justify-center">
+              {items.length}
+            </span>}
           </Link>
         </div>
       </div>

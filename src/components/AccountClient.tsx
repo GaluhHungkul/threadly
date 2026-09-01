@@ -15,7 +15,7 @@ import {
   X,
   CheckCircle2,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
+ 
 import Footer from "@/components/Footer";
 
 interface WishlistItem {
@@ -90,7 +90,7 @@ export default function AccountClient() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f9f9] text-[#1a1c1c] selection:bg-[#000000] selection:text-[#ffffff]">
       {/* Header */}
-      <Navbar />
+       
 
       {/* Main Content Area */}
       <main className="flex-grow max-w-[1440px] mx-auto w-full px-6 md:px-16 py-10 md:py-16">
@@ -260,7 +260,7 @@ export default function AccountClient() {
                     Curated Wishlist
                   </h2>
                   <p className="text-xs text-[#717171] mt-1 font-normal">
-                    A selection of pieces you're currently observing.
+                    A selection of pieces you&apos;re currently observing.
                   </p>
                 </div>
 

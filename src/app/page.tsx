@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+ 
 import HeroSection from "@/components/HeroSection";
 import EditorialGridSection from "@/components/EditorialGridSection";
 import NewArrivalsSection from "@/components/NewArrivalsSection";
@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f9f9] text-[#1a1c1c] selection:bg-[#000000] selection:text-[#ffffff]">
       {/* Navigation Header */}
-      <Navbar />
+       
 
       {/* Main Content Sections */}
       <main className="grow">

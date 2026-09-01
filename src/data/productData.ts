@@ -15,8 +15,9 @@ export interface ProductReview {
 export interface CompleteLookItem {
   id: string;
   name: string;
-  price: string;
+  price: number;
   image: string;
+  slug: string
   alt: string;
   hasWatermark?: boolean;
   watermarkText?: string;
@@ -39,7 +40,7 @@ export interface ProductDetail {
   detailsAndCare: string[];
   shippingAndReturns: string[];
   reviews: ProductReview[];
-  completeTheLook: CompleteLookItem[];
+  // completeTheLook: CompleteLookItem[];
 }
 
 export const defaultProduct: ProductDetail = {
@@ -97,37 +98,37 @@ export const defaultProduct: ProductDetail = {
         "Gifted this to my partner. The packaging alone felt like a luxury experience. The wool is soft and the charcoal color is deep and rich.",
     },
   ],
-  completeTheLook: [
-    {
-      id: "ctl-1",
-      name: "TAPERED TROUSERS",
-      price: "$450.00",
-      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop",
-      alt: "Model wearing black tapered trousers with coat",
-    },
-    {
-      id: "ctl-2",
-      name: "SILK SCARF",
-      price: "$180.00",
-      image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=800&auto=format&fit=crop",
-      alt: "Dark charcoal luxury silk scarf folded on marble block",
-    },
-    {
-      id: "ctl-3",
-      name: "LEATHER BOOTS",
-      price: "$620.00",
-      image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=800&auto=format&fit=crop",
-      alt: "Black leather Chelsea boots",
-      hasWatermark: true,
-      watermarkText: "AESTHETE",
-      watermarkSubtext: "Minimalist Wool Coat — AESTHETE\nPolished Leather Chelsea Boot - Black\nPrice: $620 USD",
-    },
-    {
-      id: "ctl-4",
-      name: "PEBBLED TOTE",
-      price: "$890.00",
-      image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
-      alt: "Model carrying black pebbled leather tote bag",
-    },
-  ],
+  // completeTheLook: [
+  //   {
+  //     id: "ctl-1",
+  //     name: "TAPERED TROUSERS",
+  //     price: "$450.00",
+  //     image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=800&auto=format&fit=crop",
+  //     alt: "Model wearing black tapered trousers with coat",
+  //   },
+  //   {
+  //     id: "ctl-2",
+  //     name: "SILK SCARF",
+  //     price: "$180.00",
+  //     image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=800&auto=format&fit=crop",
+  //     alt: "Dark charcoal luxury silk scarf folded on marble block",
+  //   },
+  //   {
+  //     id: "ctl-3",
+  //     name: "LEATHER BOOTS",
+  //     price: "$620.00",
+  //     image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=800&auto=format&fit=crop",
+  //     alt: "Black leather Chelsea boots",
+  //     hasWatermark: true,
+  //     watermarkText: "AESTHETE",
+  //     watermarkSubtext: "Minimalist Wool Coat — AESTHETE\nPolished Leather Chelsea Boot - Black\nPrice: $620 USD",
+  //   },
+  //   {
+  //     id: "ctl-4",
+  //     name: "PEBBLED TOTE",
+  //     price: "$890.00",
+  //     image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop",
+  //     alt: "Model carrying black pebbled leather tote bag",
+  //   },
+  // ],
 };

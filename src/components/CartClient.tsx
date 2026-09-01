@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Trash2, ChevronDown, Truck, Lock, ArrowRight, ShoppingBag } from "lucide-react";
-import Navbar from "@/components/Navbar";
+import { useCart } from "@/lib/zustand/cart";
+ 
 
 interface CartItem {
   id: string;
@@ -20,32 +21,7 @@ interface CartItem {
 }
 
 export default function CartClient() {
-  const [items, setItems] = useState<CartItem[]>([
-    {
-      id: "cart-1",
-      name: "Architectural Wool Overcoat",
-      price: 1240,
-      formattedPrice: "$1,240.00",
-      color: "CHARCOAL GREY",
-      size: "50 (L)",
-      stockStatus: "In Stock",
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=600&auto=format&fit=crop",
-      alt: "Architectural wool overcoat in charcoal grey",
-    },
-    {
-      id: "cart-2",
-      name: "Smooth Calfskin Tote",
-      price: 850,
-      formattedPrice: "$850.00",
-      color: "OBSIDIAN",
-      size: "ONE SIZE",
-      stockStatus: "Low Stock",
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=600&auto=format&fit=crop",
-      alt: "Smooth calfskin tote bag in obsidian black",
-    },
-  ]);
+  const { items, removeItem, decreaseQuantity, increaseQuantity } = useCart()
 
   const [isPromoOpen, setIsPromoOpen] = useState(false);
   const [promoCode, setPromoCode] = useState("");
@@ -53,22 +29,6 @@ export default function CartClient() {
   const [promoError, setPromoError] = useState("");
   const [promoSuccess, setPromoSuccess] = useState("");
   const [imageErrorMap, setImageErrorMap] = useState<Record<string, boolean>>({});
-
-  const handleQuantityChange = (id: string, delta: number) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          const newQty = Math.max(1, item.quantity + delta);
-          return { ...item, quantity: newQty };
-        }
-        return item;
-      })
-    );
-  };
-
-  const handleRemoveItem = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
 
   const handleApplyPromo = (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,7 +61,7 @@ export default function CartClient() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f9f9] text-[#1a1c1c] selection:bg-[#000000] selection:text-[#ffffff]">
       {/* Header */}
-      <Navbar />
+       
 
       {/* Main Container */}
       <main className="flex-grow max-w-[1440px] mx-auto w-full px-6 md:px-16 py-8 md:py-12">
@@ -133,7 +93,7 @@ export default function CartClient() {
             <div className="lg:col-span-7 space-y-6">
               {items.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.id + item.color + item.size}
                   className="bg-white border border-[#e5e5e5] p-5 sm:p-7 flex flex-col sm:flex-row gap-6 transition-all duration-300 hover:border-[#cfc4c5]"
                 >
                   {/* Item Image */}
@@ -141,7 +101,7 @@ export default function CartClient() {
                     {!imageErrorMap[item.id] ? (
                       <Image
                         src={item.image}
-                        alt={item.alt}
+                        alt={item.name}
                         fill
                         className="object-cover object-center"
                         onError={() => handleImageError(item.id)}
@@ -167,20 +127,23 @@ export default function CartClient() {
                         </span>
                       </div>
 
-                      <p className="text-xs font-medium tracking-wider text-[#717171] uppercase">
-                        COLOR: {item.color} | SIZE: {item.size}
-                      </p>
+                      <div className="text-xs font-medium tracking-wider text-[#717171] uppercase">
+                        <div className="flex items-center gap-2">
+                          COLOR: <div className={`size-4 rounded border`} style={{ background: `${item.color}`}}/> 
+                        </div>
+                        SIZE: {item.size}
+                      </div>
 
-                      <p className="text-xs text-[#1a1c1c] font-normal pt-1">
+                      {/* <p className="text-xs text-[#1a1c1c] font-normal pt-1">
                         {item.stockStatus}
-                      </p>
+                      </p> */}
                     </div>
 
                     {/* Quantity Stepper & Remove Action */}
                     <div className="flex items-center justify-between pt-4 border-t border-[#eeeeee]">
                       <div className="inline-flex items-center border border-[#e5e5e5] bg-white px-3 py-1.5 space-x-3 text-xs font-medium">
                         <button
-                          onClick={() => handleQuantityChange(item.id, -1)}
+                          onClick={() => decreaseQuantity(item.id, item.size, item.color)}
                           className="text-[#1a1c1c] hover:text-[#717171] px-1 font-bold"
                           aria-label="Decrease quantity"
                         >
@@ -188,7 +151,7 @@ export default function CartClient() {
                         </button>
                         <span className="text-[#1a1c1c] px-2">{item.quantity}</span>
                         <button
-                          onClick={() => handleQuantityChange(item.id, 1)}
+                          onClick={() => increaseQuantity(item.id, item.size, item.color)}
                           className="text-[#1a1c1c] hover:text-[#717171] px-1 font-bold"
                           aria-label="Increase quantity"
                         >
@@ -197,7 +160,7 @@ export default function CartClient() {
                       </div>
 
                       <button
-                        onClick={() => handleRemoveItem(item.id)}
+                        onClick={() => removeItem(item.id, item.size, item.color)}
                         className="text-xs font-medium tracking-wider text-[#717171] hover:text-[#1a1c1c] uppercase flex items-center space-x-1.5 transition-colors cursor-pointer"
                       >
                         <Trash2 size={14} strokeWidth={1.5} />
