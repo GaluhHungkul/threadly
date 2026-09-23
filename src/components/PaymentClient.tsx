@@ -3,18 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { CreditCard, Lock, ArrowRight, CheckCircle2, ShoppingBag, Search } from "lucide-react";
+import { CreditCard, Lock, ArrowRight, CheckCircle2, ShoppingBag } from "lucide-react";
+import { useCart } from "@/lib/zustand/cart";
  
-
-interface OrderItem {
-  id: string;
-  name: string;
-  subtitle: string;
-  price: number;
-  formattedPrice: string;
-  image: string;
-}
-
 export default function PaymentClient() {
   // Form State
   const [fullName, setFullName] = useState("");
@@ -34,26 +25,9 @@ export default function PaymentClient() {
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [lookImageErrors, setLookImageErrors] = useState<Record<string, boolean>>({});
 
-  const orderItems: OrderItem[] = [
-    {
-      id: "item-1",
-      name: "STRUCTURED WOOL COAT",
-      subtitle: "Size: Medium / Noir",
-      price: 1250,
-      formattedPrice: "€1,250.00",
-      image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=600&auto=format&fit=crop",
-    },
-    {
-      id: "item-2",
-      name: "SILK RIBBON SCARF",
-      subtitle: "One Size / Bone",
-      price: 220,
-      formattedPrice: "€220.00",
-      image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80&w=600&auto=format&fit=crop",
-    },
-  ];
+  const { items, clearCart } = useCart()
 
-  const subtotal = orderItems.reduce((acc, item) => acc + item.price, 0);
+  const subtotal = items.reduce((acc, item) => acc + item.price, 0);
   const shippingCost = shippingMethod === "standard" ? 15 : 45;
   const total = subtotal + shippingCost;
 
@@ -82,6 +56,7 @@ export default function PaymentClient() {
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    clearCart()
     setTimeout(() => {
       setIsSubmitting(false);
       setOrderConfirmed(true);
@@ -124,7 +99,8 @@ export default function PaymentClient() {
           </ol>
         </nav>
 
-        {/* 2-Column Grid Layout */}
+        {items.length > 0 
+        ? (
         <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* Left Column: Form Sections (Shipping Address, Shipping Method, Payment Method) */}
           <div className="lg:col-span-7 space-y-12">
@@ -394,7 +370,7 @@ export default function PaymentClient() {
 
               {/* Items List */}
               <div className="space-y-4 pb-6 border-b border-[#e5e5e5]">
-                {orderItems.map((item) => (
+                {items.map((item) => (
                   <div key={item.id} className="flex items-center space-x-4">
                     <div className="relative w-16 h-20 bg-[#f4f4f4] overflow-hidden flex-shrink-0">
                       {!lookImageErrors[item.id] ? (
@@ -418,10 +394,10 @@ export default function PaymentClient() {
                         {item.name}
                       </h3>
                       <p className="text-[11px] text-[#717171]">
-                        {item.subtitle}
+                        {item.color} | {item.size}
                       </p>
                       <p className="text-xs font-normal text-[#1a1c1c] pt-1">
-                        {item.formattedPrice}
+                        ${item.price}
                       </p>
                     </div>
                   </div>
@@ -472,6 +448,29 @@ export default function PaymentClient() {
             </div>
           </div>
         </form>
+        )
+        : <div className="py-20 text-center space-y-6 max-w-md mx-auto">
+            <div className="w-16 h-16 bg-[#f3f3f3] text-[#717171] rounded-full flex items-center justify-center mx-auto">
+              <ShoppingBag size={28} strokeWidth={1.5} />
+            </div>
+            <div className="space-y-2">
+              <h2 className="font-serif text-3xl font-normal text-[#1a1c1c]">
+                Your Bag is Empty
+              </h2>
+              <p className="text-xs text-[#717171] leading-relaxed">
+                Discover our latest editorial collection of minimalist essentials.
+              </p>
+            </div>
+            <Link
+              href="/"
+              className="inline-block bg-[#000000] text-white py-4 px-8 text-xs font-medium tracking-[0.2em] uppercase hover:bg-[#222222] transition-colors"
+            >
+              EXPLORE NEW ARRIVALS
+            </Link>
+          </div>
+        }
+
+        
       </main>
 
       {/* Confirmation Modal */}
@@ -487,7 +486,7 @@ export default function PaymentClient() {
                 Order Confirmed
               </h3>
               <p className="text-xs text-[#717171] uppercase tracking-widest">
-                ORDER #TH-{Math.floor(100000 + Math.random() * 900000)}
+                {/* ORDER #TH-{Math.floor(100000 + Math.random() * 900000)} */}
               </p>
             </div>
 
